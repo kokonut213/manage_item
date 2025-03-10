@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if action == 'add' %}Thêm mới thiết bị{% else %}Sửa thiết bị{% endif %}{% endblock %}
+{% block page_heading %}{% if action == 'add' %}Thêm mới thiết bị{% else %}Sửa thiết bị{% endif %}{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="device_name" class="form-label">Tên thiết bị:</label>
+            <input type="text" class="form-control" id="device_name" name="device_name" value="{{ device['device_name'] if device }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="device_type" class="form-label">Loại thiết bị:</label>
+            <input type="text" class="form-control" id="device_type" name="device_type" value="{{ device['device_type'] if device }}">
+        </div>
+        <div class="mb-3">
+            <label for="brand" class="form-label">Hãng sản xuất:</label>
+            <input type="text" class="form-control" id="brand" name="brand" value="{{ device['brand'] if device }}">
+        </div>
+        <div class="mb-3">
+            <label for="location" class="form-label">Vị trí:</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ device['location'] if device }}">
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">Tình trạng:</label>
+            <select class="form-select" id="status" name="status" required>
+                <option value="Hoạt động" {% if device and device['status'] == 'Hoạt động' %}selected{% endif %}>Hoạt động</option>
+                <option value="Hỏng" {% if device and device['status'] == 'Hỏng' %}selected{% endif %}>Hỏng</option>
+                <option value="Cần sửa chữa" {% if device and device['status'] == 'Cần sửa chữa' %}selected{% endif %}>Cần sửa chữa</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">{% if action == 'add' %}Thêm mới{% else %}Lưu thay đổi{% endif %}</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Hủy</a>
+    </form>
+{% endblock %}

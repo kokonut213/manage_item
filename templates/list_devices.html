@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Danh sách Thiết bị{% endblock %}
+{% block page_heading %}Danh sách Thiết bị{% endblock %}
+
+{% block content %}
+    <div class="mb-3">
+        {% if session.get('user_role') == 'admin' %}  <!-- Chỉ admin thấy nút "Thêm mới" -->
+        <a href="{{ url_for('admin_add_device') }}" class="btn btn-primary">Thêm mới thiết bị</a>
+        {% endif %}
+    </div>
+
+    <form action="{{ url_for('search') }}" method="post" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Tìm kiếm thiết bị..." name="keyword" value="{{ search_keyword if search_keyword }}">
+            <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tên thiết bị</th>
+                <th>Loại thiết bị</th>
+                <th>Hãng sản xuất</th>
+                <th>Vị trí</th>
+                <th>Tình trạng</th>
+                
+                {% if session.get('user_role') == 'admin' %}  <!-- Chỉ admin thấy cột "Hành động" -->
+                <th>Hành động</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for device in devices %}
+            <tr>
+                <td>{{ device['device_name'] }}</td>
+                <td>{{ device['device_type'] }}</td>
+                <td>{{ device['brand'] }}</td>
+                <td>{{ device['location'] }}</td>
+                <td>{{ device['status'] }}</td>
+              
+                {% if session.get('user_role') == 'admin' %}  <!-- Chỉ admin thấy nút "Sửa", "Xóa" -->
+                <td>
+                    <a href="{{ url_for('admin_edit_device', id=device['id']) }}" class="btn btn-sm btn-warning">Sửa</a>
+                    <a href="{{ url_for('admin_delete_device', id=device['id']) }}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa thiết bị này?')">Xóa</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="{% if session.get('user_role') == 'admin' %}6{% else %}5{% endif %}">Không có thiết bị nào.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

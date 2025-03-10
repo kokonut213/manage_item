@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Sửa tình trạng thiết bị{% endblock %}
+{% block page_heading %}Sửa tình trạng thiết bị{% endblock %}
+
+{% block content %}
+    <p>Thiết bị: <strong>{{ device['device_name'] }}</strong></p>
+    <form method="post">
+        <div class="mb-3">
+            <label for="status" class="form-label">Tình trạng:</label>
+            <select class="form-select" id="status" name="status" required>
+                <option value="Hoạt động" {% if device and device['status'] == 'Hoạt động' %}selected{% endif %}>Hoạt động</option>
+                <option value="Hỏng" {% if device and device['status'] == 'Hỏng' %}selected{% endif %}>Hỏng</option>
+                <option value="Cần sửa chữa" {% if device and device['status'] == 'Cần sửa chữa' %}selected{% endif %}>Cần sửa chữa</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Lưu thay đổi tình trạng</button>
+        <a href="{{ url_for('staff_devices') }}" class="btn btn-secondary">Hủy</a>
+    </form>
+{% endblock %}

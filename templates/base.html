@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Quản lý Thiết bị Trường học{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-3"> <!-- Thêm div flex để căn chỉnh -->
+            <h1 class="mb-0">{% block page_heading %}Quản lý Thiết bị Trường học{% endblock %}</h1>
+            <div> <!-- Div chứa nút Login/Register bên phải -->
+                {% if session.get('user_role') %} <!-- Nếu đã đăng nhập -->
+                    {% if session['user_role'] == 'admin' %}
+                        <a href="{{ url_for('admin_logout') }}" class="btn btn-secondary btn-sm">Đăng xuất Admin</a>
+                    {% elif session['user_role'] == 'staff' %}
+                        <a href="{{ url_for('staff_logout') }}" class="btn btn-secondary btn-sm">Đăng xuất Staff</a>
+                    {% endif %}
+                {% else %} <!-- Nếu chưa đăng nhập -->
+                    <a href="{{ url_for('admin_login') }}" class="btn btn-primary btn-sm">Admin Login</a>
+                    <a href="{{ url_for('staff_login') }}" class="btn btn-info btn-sm">Staff Login</a>
+                    <a href="{{ url_for('register_admin_route') }}" class="btn btn-success btn-sm">Admin Register</a>
+                    <a href="{{ url_for('register_staff_route') }}" class="btn btn-warning btn-sm">Staff Register</a>
+                {% endif %}
+            </div>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
